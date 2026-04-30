@@ -1,1 +1,41 @@
-Insert your documented code here
+Code for Touch Sensor 
+
+import RPi.GPIO as GPIO
+import time
+
+PIN_TOUCH = 17
+POLL_INTERVAL = 0.1
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
+GPIO.setup(PIN_TOUCH, GPIO.IN)
+
+def read_touch():
+    return bool(GPIO.input(PIN_TOUCH))
+
+def main():
+    print("=== TTP223 Touch Sensor Ready ===")
+    print("Press Ctrl+C to stop.\n")
+
+    last_state = False
+
+    try:
+        while True:
+            current_state = read_touch()
+
+            if current_state and not last_state:
+                print("👆 TOUCHED")
+            elif not current_state and last_state:
+                print("✋ RELEASED")
+
+            last_state = current_state
+            time.sleep(POLL_INTERVAL)
+
+    except KeyboardInterrupt:
+        print("\n[INFO] Stopped by user.")
+    finally:
+        GPIO.cleanup()
+        print("[INFO] GPIO cleaned up.")
+
+if __name__ == "__main__":
+    main()
