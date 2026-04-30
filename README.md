@@ -3,7 +3,7 @@
 ## Final Project README
 
 > **Project Weight:** 100%  
-> **Team Size:** 4/3 students  
+> **Team Size:** 3 students  
 > **Project Duration:** 16 hours  
 > **Total Time Available:** 32 effort-hours per team  
 > **Project Type:** Playful, interactive, technology-based experience
@@ -28,7 +28,7 @@ Do not keep the default repository name.
 
 # How to use this README
 
-This file is your team’s **working project document**.
+This file is your team's **working project document**.
 
 You must keep updating it throughout the build period.  
 By the final review, this README should clearly show:
@@ -57,18 +57,19 @@ By the final review, this README should clearly show:
 
 ## 1.1 Studio / Group Name
 
-`Project^2`
+`Project^35`
 
 ## 1.2 Team Members
 
-| Name                  | Primary Role                    | Secondary Role   | Strengths Brought to the Project |
-| --------------        | ------------------------------- | --------------   | -------------------------------- |
-| `Mrugendra Vasmatkar` | `[Electronics / Coding / App ]` | `Documentation`  | `Documentation, Gift of Gab `|
-| `Jyoti Bagate`        | `[Electronics / Fabrication]`   | `[Coding]`       | `Material Handling, Hardware`    |
+| Name              | Primary Role    | Secondary Role | Strengths Brought to the Project                    |
+| ----------------- | --------------- | -------------- | --------------------------------------------------- |
+| Vedant Kale       | Research, AI    | Prompting      | AI integration, sensor threshold analysis           |
+| Heramb Pednekar   | Coding          | Documentation  | Python development, documentation, Bluetooth logic  |
+| Kaushal Patil     | Electronics     | Coding         | Hardware wiring, sensor interfacing, I2C setup      |
 
 ## 1.3 Project Title
 
-`"Project Project"`
+`"BallTime"`
 
 `(because Project-or)`
 
@@ -76,18 +77,18 @@ By the final review, this README should clearly show:
 
 ## 1.4 One-Line Pitch
 
-`A projected, fully customizable time portal where engineering education is done through PUBG battlefield in the comfort of our home`
+`BallTime is a Raspberry Pi-powered IoT smart node that simultaneously monitors air quality, ambient temperature, and physical security — broadcasting real-time sensor data and alerts wirelessly over Bluetooth to a paired device.`
 
 ## 1.5 Expanded Project Idea
 
-In 1–2 paragraphs, explain:
+**What the project is:**  
+BallTime is a compact, self-contained IoT environmental and security monitoring system built around a Raspberry Pi 4B. It acts as a localized "smart node" that continuously tracks ambient conditions and physical tamper events in real time. Four sensors — a Temperature sensor, a Gas sensor, a 3-axis Accelerometer, and a Touch sensor — are polled by the Raspberry Pi via I2C and digital GPIO protocols. The consolidated sensor data is then broadcast wirelessly over Bluetooth to a paired device such as a smartphone or laptop for remote observation and alerting.
 
-- what your project is,
-- what kind of experience it creates,
-- what technologies are involved.
+**The experience it creates:**  
+A user places the BallTime node in any environment — a lab, room, or storage area — and receives live alerts on their paired device whenever something goes wrong. If the temperature rises suddenly, a combustible gas is detected, or the device is physically bumped or moved, the system immediately pushes a notification to the paired screen. A physical Touch sensor on the device itself lets the user manually acknowledge and dismiss an active alert without needing to interact with the paired device. The result is a feeling of always-on situational awareness — the environment is being watched even when no one is physically present.
 
-**Response:**  
-`A projected and fully customizable time portal can transform engineering education into an immersive PUBG-style battlefield experience from the comfort of home. In this environment, students can learn engineering concepts by entering a virtual battlefield where challenges, obstacles, and missions are designed around real technical problems. Instead of passively studying theory, learners actively apply concepts such as electronics, coding, sensors, robotics, mechanics, and system design to complete missions, solve problems, and progress through different levels. This approach makes engineering education more interactive, engaging, and practical by combining gaming, simulation, and hands-on problem-solving in a familiar and exciting format.`
+**Technologies involved:**  
+Raspberry Pi 4B (central controller and Bluetooth broadcaster), I2C communication protocol (temperature sensor and accelerometer), digital GPIO (gas sensor and touch sensor), Python 3 (sensor polling, alert logic, Bluetooth streaming), and a paired laptop or smartphone running a terminal or lightweight dashboard client.
 
 ---
 
@@ -95,31 +96,23 @@ In 1–2 paragraphs, explain:
 
 ## 2.1 References
 
-List what inspired the project.
-
-| Source Type | Title / Link                                                        | What Inspired You                                                                         |
-| ----------- | ------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| `[Video]`   | `https://www.instagram.com/reel/DW4CT7WCDry/?igsh=cXg3dzAxYmdncDBo` | `How projection mapping can be used to create interactive digital + physical experiences` |
-|             |                                                                     |                                                                                           |
-|             |                                                                     |                                                                                           |
+| Source Type  | Title / Link                                                                           | What Inspired You                                                                               |
+| ------------ | -------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `[Video]`    | `https://www.instagram.com/reel/DW4CT7WCDry/?igsh=cXg3dzAxYmdncDBo`                   | `How interactive physical + digital systems can respond intelligently to real-world conditions` |
+| `[Concept]`  | `Smart Home IoT Security Systems`                                                      | `Combining multiple sensor types into a single unified monitoring node`                         |
+| `[Field]`    | `Industrial gas detection and environmental safety systems`                            | `Using gas + temperature sensors together for proactive safety alerts`                          |
 
 ## 2.2 Original Twist
 
-What makes your project original?
-
-**Response:**  
-
+Most IoT projects either monitor the environment (temperature/air quality) or security (motion/cameras) — rarely both in one compact node. BallTime's original twist is its **unified multi-modal sensing approach**: a single device simultaneously watches air quality, temperature, physical tamper events, and provides a direct physical acknowledgement input via touch. Rather than being cloud-dependent, BallTime is **local-first and Bluetooth-based** — it works reliably in environments with no internet, making it practical for labs, workshops, and storage facilities.
 
 ---
 
 # 3. Project Intent
 
-## 3.1 User Journey 
+## 3.1 User Journey
 
-Describe exactly how a user will use the project.Make it a story
-**Response:**  
-
-                                                  |
+**A story:**
 
 
 
@@ -127,21 +120,32 @@ Describe exactly how a user will use the project.Make it a story
 
 # 4. Definition of Success
 
-## 4.1 Definition of “Usable”
+## 4.1 Definition of "Usable"
 
-
+The project is considered usable when:
+- All four sensors (temperature, gas, accelerometer, touch) are reading correctly and returning valid data.
+- The Raspberry Pi consolidates sensor data and transmits it over Bluetooth without connection drops.
+- A paired device receives and displays real-time sensor values and alert notifications.
+- The touch sensor successfully acknowledges and resets an active alert.
+- The full system runs stably for at least 15 continuous minutes without crash or restart.
 
 ## 4.2 Minimum Usable Version
 
-What is the smallest version of this project that still delivers the core experience?
+The smallest version that still delivers the core experience:
+- Raspberry Pi reads at least the **gas sensor** and **temperature sensor**.
+- Data streams over Bluetooth to a paired laptop terminal.
+- An alert message appears on the terminal when gas or temperature exceeds the threshold.
+- The touch sensor dismisses the active alert.
 
-**Response:**  
-
+The accelerometer and a polished visual UI are stretch goals — not required for the minimum version.
 
 ## 4.3 Stretch Features
 
-What features are nice to have but not essential?
-
+- A simple mobile app (Android) showing live sensor gauges and color-coded alert banners.
+- Historical data logging to a local CSV file on the Pi for later review.
+- Configurable alert thresholds via Bluetooth command sent from the paired device.
+- Onboard LED indicator lights (green = all clear, red = alert active) for at-a-glance status.
+- Accelerometer sensitivity calibration accessible via a long-press of the touch sensor.
 
 ---
 
@@ -152,79 +156,58 @@ What features are nice to have but not essential?
 Check all that apply.
 
 - [x] Electronics-based
-
 - [ ] Mechanical
-
 - [x] Sensor-based
-
 - [x] App-connected
-
-- [x] Motorized
-
+- [ ] Motorized
 - [ ] Sound-based
-
 - [x] Light-based
-
 - [x] Screen/UI-based
-
 - [x] Fabricated structure
-
 - [x] Game logic based
-
 - [x] Installation
-
 - [ ] Other:
 
 ## 5.2 High-Level System Description
 
-Explain how the system works in simple terms.
+**Input:** Four sensors continuously feed data to the Raspberry Pi 4B:
+- A **Gas Sensor** detects combustible gas and smoke particles via a digital GPIO signal.
+- A **Temperature Sensor** reads ambient temperature in °C via the I2C bus.
+- A **3-axis Accelerometer** detects physical movement, bumps, or tilt via I2C.
+- A **Touch Sensor** provides a digital HIGH signal when physically pressed by the user.
 
-Include:
+**Processing:** The Raspberry Pi 4B runs a Python script that polls all four sensors every 500ms. Each reading is compared against configurable thresholds. If any threshold is crossed, an alert flag is set. If the touch sensor is pressed while an alert is active, the flag is cleared and the event is logged with a timestamp.
 
-- input,
-- processing,
-- output,
-- physical structure,
-- app interaction if any.
+**Output:** A JSON payload containing all sensor values, alert flags, and a timestamp is assembled after each poll cycle and broadcast over Bluetooth serial to the paired device. The paired device displays a live readout and fires a notification on any alert.
 
-**Response:**  
+**Physical Structure:** All components are housed in a compact enclosure (approx. 16×16×8 cm). Sensors are mounted on the top face for air exposure. The touch button is accessible on the side panel. The Pi sits inside with wiring routed cleanly to a single USB-C power input.
+
+**App Interaction:** A Python terminal client on the paired laptop receives the Bluetooth serial stream and prints live sensor values and alert messages. A stretch goal is a dedicated mobile app with visual gauges.
 
 ## 5.3 Input / Output Map
 
-| System Part                              | Type            | What It Does                                                               |
-
+| System Part              | Type             | What It Does                                                              |
+| ------------------------ | ---------------- | ------------------------------------------------------------------------- |
+| Gas Sensor               | Input (Digital)  | Detects combustible gas/smoke; sends HIGH to GPIO when threshold exceeded |
+| Temperature Sensor       | Input (I2C)      | Reads ambient temperature in °C continuously                              |
+| Accelerometer (3-axis)   | Input (I2C)      | Detects bump, tilt, or movement; triggers tamper alert                    |
+| Touch Sensor             | Input (Digital)  | Manual alert acknowledgement; clears alert state on press                 |
+| Raspberry Pi 4B          | Processing       | Polls all sensors, evaluates thresholds, assembles and transmits payload  |
+| Bluetooth (onboard Pi)   | Output           | Broadcasts sensor data wirelessly to paired device                        |
+| Paired Device (terminal) | Output (display) | Shows real-time sensor readings and alert notifications to the user       |
 
 ---
 
-# 6. System Design, Sketches and Visual Planning 
+# 6. System Design, Sketches and Visual Planning
 
 ## 6.1 Concept Architecture/sketch/schematic
 
-Add an early sketch of the full idea.
-
-**Insert image below:**  
 `[Upload image and link here]`
-
-Example:
-
-```md
-
-```
-
-
 
 ## 6.2 Labeled Build Sketch/architecture/flow diagram/algorithm
 
-Add a sketch with labels showing:
-
-- structure,
-- electronics placement,
-- user touch points,
-- moving parts,
-- output elements.
-
-**Insert image below:**  
 `[Upload image and link here]`
+
 <img width="1600" height="1200" alt="image" src="https://github.com/user-attachments/assets/95637f31-b4e7-4427-a9e1-4b63fbeb0ac5" />
 
 ## 6.3 Approximate Dimensions
@@ -242,156 +225,161 @@ Add a sketch with labels showing:
 
 ## 7.1 Electronics Used
 
-| Component                 | Quantity | Purpose                               |
-| ------------------------- | --------:| ------------------------------------- |
-| `[Raspi/FPGA]`                 | `1`      | `[Main controller]`                   |
-| `[L298N Motor Driver]`    | `1`      | `[Control Motors]`                    |
-| `[BO Motors]`             | `2`      | `[Rotate wheels]`                     |
-| `[Buck Converter]`        | `1`      | `[Power ESP32]`                       |
-| `[Li Ion Battery Pack]`   | `2`      | `[Power]`                             |
-| `[Projector]`             | `1`      | `[Display obstacles]`                 |
-| `Camera (Webcam / Phone)` | `1`      | `[Tracks car position using markers]` |
+| Component                     | Quantity | Purpose                                                       |
+| ----------------------------- | -------: | ------------------------------------------------------------- |
+| Raspberry Pi 4B               | `1`      | Central controller — polls sensors, processes data, transmits |
+| Temperature Sensor (I2C)      | `1`      | Reads ambient temperature                                     |
+| Gas Sensor (MQ-2 or similar)  | `1`      | Detects combustible gases and smoke                           |
+| Accelerometer (MPU-6050)      | `1`      | Detects physical tamper/movement via 3-axis data (I2C)        |
+| Touch Sensor Module           | `1`      | Manual alert acknowledgement input                            |
+| Jumper Wires & Breadboard     | —        | Prototyping connections between Pi and sensors                |
 
 ## 7.2 Wiring Plan
 
-Describe the main electrical connections.
+The **Raspberry Pi 4B** is the central hub. All sensors connect to its GPIO header:
 
-**sample Response:**  
-`The RASPI is connected to the motor driver (L298N) using four GPIO pins (18,19; 22,23) to control motor direction (IN1, IN2, IN3, IN4). Two PWM-capable pins (ENA and ENB; 25 and 26) are connected to control the speed of each motor.
-
-The motors are connected to the output terminals of the motor driver. The motor driver is powered directly by the battery pack (higher voltage), while the ESP32 receives regulated 5V from the buck converter.
-
-All components share a common ground to ensure stable operation. The projector and camera are connected to the laptop, which handles tracking and game logic separately.`
+- **Temperature Sensor** — connected via I2C (SDA → GPIO2 / Pin 3, SCL → GPIO3 / Pin 5). Communicates at I2C address 0x48 (varies by sensor model).
+- **Gas Sensor (MQ-2)** — digital output pin connected to GPIO17. The onboard potentiometer sets the analog detection threshold; the Pi reads a HIGH signal when gas concentration exceeds it.
+- **Accelerometer (MPU-6050)** — connected via I2C (shares SDA/SCL bus with temperature sensor at address 0x68; AD0 pin set LOW by default). The Pi reads 3-axis acceleration registers every 500ms and computes a delta against a calibrated baseline.
+- **Touch Sensor** — digital output connected to GPIO27. A HIGH signal on press triggers the alert acknowledgement routine.
+- **Bluetooth** — handled by the Raspberry Pi's onboard Bluetooth module; no external wiring required.
+- All components share a **common ground**. Power is supplied via USB-C to the Pi; the buck converter steps down the Li-Ion battery voltage to 5V for stable operation.
 
 ## 7.3 Circuit Diagram/architecture diagram
 
-Insert a hand-drawn or software-made circuit diagram.
-
-**Insert image below:**  
 `[Upload image and link here]`
+
 <img width="867" height="1156" alt="" src="" />
 
+## 7.4 Power Plan
 
-# 7.4. Power Plan
-
-| Question         | Response                                                                                                                                          |
-| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Power source     | `Battery (Li-ion pack)`                                                                                                                           |
-| Voltage required | `~6–8.4V for motors (via driver), stepped down to 5V for ESP32 (buck converter)`                                                                  |
-| Current concerns | `Motors can draw high current under load, which may cause voltage drops affecting ESP32 and WiFi stability`                                       |
-| Safety concerns  | `Avoid over-discharging Li-ion batteries, ensure proper voltage regulation, prevent short circuits, and secure wiring to avoid loose connections` |
 
 ---
 
-# 8. Software Planning/
+# 8. Software Planning
 
 ## 8.1 Software Tools
 
-| Tool / Platform                | Purpose                                        |
-| ------------------------------ | ---------------------------------------------- |
-| `[MicroPython]`                | `Control ESP32`                                |
-| `[Python/PyGame/OpenCV]`       | `Track markers, game logic, create projection` |
-| `[Fusion/Blender/Illustrator]` | `[Prototyping structure]`                      |
-|                                |                                                |
+| Tool / Platform         | Purpose                                                      |
+| ----------------------- | ------------------------------------------------------------ |
+| Python 3                | Main application — sensor polling, threshold logic, alerts   |
+| smbus2                  | I2C communication with temperature sensor and accelerometer  |
+| RPi.GPIO                | Digital I/O for gas sensor and touch sensor                  |
+| PyBluez / BlueZ (Linux) | Bluetooth RFCOMM serial transmission from the Pi             |
+| Terminal / Python REPL  | Paired device receives and displays live Bluetooth data      |
 
 ## 8.2 Software Logic/Algorithm
 
-Describe what the code must do.
+- **Startup behavior:**  
+  The Pi initializes the I2C bus and confirms both I2C devices (temperature sensor and MPU-6050) are reachable. GPIO pins are configured for the gas sensor (input) and touch sensor (input with pull-down). The Bluetooth RFCOMM server socket opens and waits for a paired device to connect before the main loop begins.
 
-Include:
-
-- startup behavior,
-- input handling,
-- sensor reading,
-- decision logic,
-- output behavior,
-- communication logic,
-- reset behavior.
-
-**Response:**  
-`
-
-- **Sample Startup behavior:**  
-  The Raspi/FPGA initializes motor pins, PWM control, and starts a WiFi access point with a web server. The laptop initializes camera input, tracking system, and projection mapping.
 - **Input handling:**  
-  Movement commands are received from the laptop (pygame sends http requests)
+  A main polling loop runs every 500ms. Each iteration reads all four sensor values sequentially. The touch sensor is checked for a LOW-to-HIGH rising edge to distinguish a fresh press from a held state.
+
 - **Sensor reading:**  
-  The camera continuously captures frames, and OpenCV detects ArUco markers to determine the car’s position and orientation.
+  - Temperature: I2C register read → convert raw value to °C using sensor datasheet formula.  
+  - Gas: Read GPIO pin state — HIGH means gas threshold exceeded, LOW means clear.  
+  - Accelerometer: Read X, Y, Z registers via I2C → compute vector magnitude → compare delta against calibrated baseline.  
+  - Touch: Read GPIO pin — HIGH = pressed.
+
 - **Decision logic:**  
-  The system maps the car’s position into a virtual coordinate system and checks for nearby obstacles or collisions. If movement is valid, the command is allowed; if not, it is blocked or replaced with a feedback action (like a slight shake).
+  After each read cycle, values are evaluated:  
+  - Temperature > T_MAX → set temperature alert flag.  
+  - Gas == HIGH → set gas alert flag.  
+  - Accel delta > A_THRESHOLD → set tamper alert flag.  
+  - Touch pressed AND any alert flag active → clear all alert flags, write acknowledgement log entry with timestamp.
+
 - **Output behavior:**  
-  The ESP32 drives the motors using PWM signals to control speed and direction. The projector displays the updated game environment, including obstacles, targets, and feedback visuals.
+  A JSON payload is assembled per cycle: `{"timestamp": ..., "temp_c": ..., "gas": ..., "accel": {"x":...,"y":...,"z":...}, "alerts": [...]}`. This is serialized and sent over the Bluetooth RFCOMM socket to the paired device.
+
 - **Communication logic:**  
-  The laptop sends HTTP requests (e.g., `/forward`, `/left`) to the ESP32 over WiFi. The ESP32 parses these commands and executes motor actions.
+  Bluetooth RFCOMM serial socket streams payloads continuously. If the paired device disconnects, the Pi logs the disconnection, continues collecting sensor data locally, and resumes broadcasting automatically on reconnect.
+
 - **Reset behavior:**  
-  If no command is received within a short timeout, the ESP32 stops the motors. The game resets when a level is completed or restarted.`
+  Alert flags reset on touch acknowledgement or via a keyboard command (`r` + Enter) sent from the paired device over Bluetooth. The system loops indefinitely until powered off — there is no idle shutdown.
 
 ## 8.3 Code Flowchart
 
-Insert a flowchart showing your code logic.
+```
+START
+  │
+  ▼
+Initialize I2C bus
+Confirm temperature sensor + MPU-6050 addresses
+Configure GPIO pins (gas sensor, touch sensor)
+Open Bluetooth RFCOMM server socket
+  │
+  ▼
+Wait for Bluetooth client to connect
+  │
+  ▼
+┌──────────────────────────────────────────────────┐
+│                 MAIN POLLING LOOP                │
+│                  (every 500ms)                   │
+│                                                  │
+│  1. Read Temperature via I2C → convert to °C     │
+│  2. Read Gas Sensor GPIO pin → HIGH / LOW         │
+│  3. Read Accelerometer X,Y,Z via I2C             │
+│     → compute magnitude delta from baseline      │
+│  4. Read Touch Sensor GPIO pin                   │
+│                                                  │
+│  EVALUATE THRESHOLDS:                            │
+│    temp > T_MAX?     → set TEMP_ALERT            │
+│    gas == HIGH?      → set GAS_ALERT             │
+│    accel_delta > A?  → set TAMPER_ALERT          │
+│                                                  │
+│  Touch pressed AND alert active?                 │
+│    YES → clear all alert flags                   │
+│           log acknowledgement + timestamp        │
+│                                                  │
+│  Assemble JSON payload                           │
+│  Send over Bluetooth RFCOMM socket               │
+│                                                  │
+│  Remote command received (e.g. "r")?             │
+│    YES → reset alert flags                       │
+│                                                  │
+│  Wait 500ms → repeat                             │
+└──────────────────────────────────────────────────┘
+  │
+  ▼
+On exception → log error to file
+              attempt sensor re-init
+              continue loop
+```
 
-Suggested sequence:
-
-- start,
-- initialize,
-- wait for input,
-- read input,
-- decision,
-- trigger output,
-- repeat or reset,
-- error handling.
-
-**Insert image below:**  
-<img width="1600" height="1200" alt="image" src="" />
-<img width="1600" height="1200" alt="image" src="" />
-
-
-
+---
 
 # 9. Bill of Materials
 
 ## 9.1 Full BOM
 
-| Item                             | Quantity | In Kit? | Need to Buy? | Estimated Cost | Material / Spec               | Why This Choice?          |
-| -------------------------------- | --------:| ------- | ------------ | --------------:| ----------------------------- | ------------------------- |
-| `[RASPI]`                        | `1`      | `Yes`   | `No`         | `0`            | `38 Pin ESP32`                | `[To control components]` |
-| `[Motor Driver]`                 | `[1]`    | `[Yes]` | `[No]`       | `0`            | `[LN296]`                     | `[To drive both motors]`  |
-| `[DC Motors and wheel]`          | `[2]`    | `[No]`  | `[Yes]`      | `[150]`        | `[BO Motors and 6 cm wheels]` | `[high torque motors]`    |
-| `[Buck Converter]`               | `[1]`    | `[No]`  | `[Yes]`      | `[75]`         |                               |                           |
-| `[Li-ion batteries with holder]` | `[1]`    | `[No]`  | `[Yes]`      | `[200]`        |                               |                           |
+| Item                              | Quantity | In Kit? | Need to Buy? | Estimated Cost | Material / Spec                   | Why This Choice?                                          |
+| --------------------------------- | -------: | ------- | ------------ | -------------: | --------------------------------- | --------------------------------------------------------- |
+| Raspberry Pi 4B                   | `1`      | `Yes`   | `No`         | `0`            | `4B, 2GB+ RAM`                    | Full Linux OS, built-in Bluetooth, native I2C support     |
+| Temperature Sensor (I2C)          | `1`      | `Yes`   | `No`         | `0`            | `DS18B20 or DHT22 / I2C variant`  | Accurate, I2C-compatible, low power                       |
+| Gas Sensor (MQ-2)                 | `1`      | `Yes`   | `No`         | `0`            | `MQ-2 (LPG, smoke, propane)`      | Broad sensitivity to combustible gases; digital output    |
+| Accelerometer (MPU-6050)          | `1`      | `Yes`   | `No`         | `0`            | `I2C, 3-axis, 16-bit`             | High sensitivity for tamper detection; shares I2C bus     |
+| Touch Sensor Module               | `1`      | `Yes`   | `No`         | `0`            | `TTP223 capacitive module`        | Clean digital output; no mechanical debounce needed       |
+| Jumper Wires & Breadboard         | —        | `Yes`   | `No`         | `0`            | `Standard 40-pin jumper set`      | Rapid prototyping and sensor connection                   |
 
 ## 9.2 Material Justification
 
-Explain why you selected your main materials and components.
+The **Raspberry Pi 4B** was chosen over an ESP32 or Arduino because the project requires simultaneous multi-sensor polling, a full Bluetooth stack, and Python-based logic — all of which benefit from a Linux operating system. Its onboard Bluetooth eliminates the need for an external module and simplifies the architecture considerably.
 
-**Response:**  
-`DC motors (BO motors) were chosen instead of servos or steppers because the system requires continuous rotation for movement rather than precise angular control (Previously, we were considering using steppers as we were planning on tracking movement on the ESP using its relative position from an origin, but since we're using a camera now, this is not required). A motor driver (L298N) was used to allow bidirectional control and speed variation using PWM.`
+The **MPU-6050 accelerometer** shares the I2C bus with the temperature sensor, keeping wiring minimal and GPIO usage low. Its configurable sensitivity and 16-bit resolution make it well-suited to detecting both gentle nudges and hard impacts for tamper detection.
 
+The **MQ-2 gas sensor** was selected for its broad sensitivity to common combustible gases and smoke. Its digital output pin makes GPIO integration straightforward without needing an additional ADC.
 
-## 9.3 Items You chose
+The **TTP223 touch sensor** provides a clean, debounced capacitive digital signal — more reliable than a raw mechanical button for the alert acknowledgement function, which needs to register clearly on the very first press.
 
-| Item                 | Why Needed               | Purchase Link | Latest Safe Date to Procure | Status       |
-| -------------------- | ------------------------ | ------------- | --------------------------- | ------------ |
-| `BO Motors + Wheels` | `Drive system for car`   | `robu.in`     | `15th April`                | `[Received]` |
-| `Buck Converter`     | `Stable power for ESP32` | `local store` | `before testing`            | `[Received]` |
-| `Li-ion Batteries`   | `Portable power`         | `local store` | `before testing`            | `Recieved`   |
+## 9.3 Items to Procure
 
 ## 9.4 Budget Summary
 
-| Budget Item           | Estimated Cost              |
-| --------------------- | ---------------------------:|
-| Electronics           | `[400]`                     |
-| Mechanical parts      | `[200]`                     |
-| Fabrication materials | `[0 (Available on campus)]` |
-| Purchased extras      | `[0]`                       |
-| Contingency           | `[300]`                     |
-| **Total**             | `[900]`                     |
+
 
 ## 9.5 Budget Reflection
 
-If your cost is too high, what can be simplified, removed, substituted, or shared?
-
-**Response:**  
 
 ---
 
@@ -399,42 +387,42 @@ If your cost is too high, what can be simplified, removed, substituted, or share
 
 ## 10.1 Team Working Agreement
 
-Write how your team will work together.
-
-Include:
-
-- how tasks are divided,
-- how decisions are made,
-- how progress will be checked,
-- what happens if a task is delayed,
-- how documentation will be maintained.
-
-**Response:**  
-
+- **Task division:** Kaushal owns all hardware wiring and sensor interfacing. Heramb owns the Python software, Bluetooth logic, and README. Vedant owns testing, AI-assisted threshold tuning, and documentation review.
+- **Decisions:** Made by team consensus. If the team is split, the member who owns that domain has the final say.
+- **Progress checks:** 10-minute standing sync at the start of each bi-hour block to share status and flag blockers early.
+- **Delays:** If a task is blocked, the owner flags it immediately (does not attempt to solo-solve for more than 20 minutes) so the team can re-prioritize or de-scope a stretch feature.
+- **Documentation:** Heramb maintains the README throughout the build. All members add their own notes by the end of each bi-hour block.
 
 ## 10.2 Task Breakdown
 
-| Task ID | Task                    | Owner    | Estimated Hours | Deadline     | Dependency | Status |
-| ------- | ----------------------- | -------- | ---------------:| ------------ | ---------- | ------ |
-| T1      | `[Finalize concept]`    | `[Both]` | `2`             | `1st April`  | `None`     | `Done` |
-
+| Task ID | Task                                      | Owner    | Estimated Hours | Deadline   | Dependency | Status        |
+| ------- | ----------------------------------------- | -------- | --------------: | ---------- | ---------- | ------------- |
+| T1      | Finalize concept & system architecture    | All      | `1`             | Hour 1     | None       | `Done`        |
+| T2      | Wire all sensors to Raspberry Pi          | Kaushal  | `2`             | Hour 2     | T1         | `Done`        |
+| T3      | Write sensor polling scripts (Python)     | Heramb   | `2`             | Hour 2     | T1         | `Done`        |
+| T4      | I2C sensor verification & calibration     | Kaushal  | `1`             | Hour 3     | T2         | `Done`        |
+| T5      | Bluetooth RFCOMM transmission logic       | Heramb   | `2`             | Hour 3     | T3         | `Done`        |
+| T6      | Threshold tuning & alert flag logic       | Vedant   | `1`             | Hour 3     | T3, T4     | `Done`        |
+| T7      | End-to-end integration test               | All      | `2`             | Hour 4     | T5, T6     | `In Progress` |
+| T8      | Enclosure assembly & finishing            | Kaushal  | `1`             | Hour 4     | T2         | `Pending`     |
+| T9      | Playtesting, documentation, final review  | Vedant   | `2`             | Hour 4     | T7         | `Pending`     |
 
 ## 10.3 Responsibility Split
 
-| Area                 | Main Owner     | Support Owner |
-| -------------------- | ----------     | ------------- |
-| Concept              | `[Mrugendra]`  | `[Jyoti]`     |
-| Electronics          | `[]`           | `[]`          |
-| Coding               | `[]`           | `[]`          |
-| Mechanical build     | `[]`           | `[]`          |
-| Testing              | `[]`           | `[]`          |
-| Documentation        | `[]`           | `[]`          |
+| Area              | Main Owner   | Support Owner |
+| ----------------- | ------------ | ------------- |
+| Concept           | Vedant       | All           |
+| Electronics       | Kaushal      | Heramb        |
+| Coding            | Heramb       | Vedant        |
+| Mechanical build  | Kaushal      | Heramb        |
+| Testing           | Vedant       | All           |
+| Documentation     | Heramb       | Vedant        |
 
 ---
 
-# 11 hour Milestones
+# 11. Hour Milestones
 
-## 11.1 8-hour Plan(tentetively you may set)
+## 11.1 8-hour Plan
 
 ### Bi Hour 1 — Plan and De-risk
 
@@ -445,7 +433,7 @@ Expected outcomes:
 - [x] Sketches made
 - [x] BOM completed
 - [x] Purchase needs identified
-- [ ] Key uncertainty identified
+- [x] Key uncertainty identified (I2C address conflict between temperature sensor and MPU-6050)
 - [x] Basic feasibility tested
 
 ### Bi Hour 2 — Build Subsystems
@@ -453,7 +441,7 @@ Expected outcomes:
 Expected outcomes:
 
 - [x] Electronics tests completed
-- [ ] CAD / structure planning completed
+- [x] Sensor wiring to Pi verified with i2cdetect
 - [ ] App UI started if needed
 - [x] Mechanical concept tested
 - [x] Main subsystems partially working
@@ -466,7 +454,7 @@ Expected outcomes:
 - [x] Electronics integrated
 - [x] Code connected to hardware
 - [ ] App connected if required
-- [x] First playable version exists
+- [x] First working sensor-to-Bluetooth pipeline exists
 
 ### Bi Hour 4 — Refine and Finish
 
@@ -478,14 +466,12 @@ Expected outcomes:
 - [x] Documentation completed
 - [x] Final build ready
 
-## 12.2  Update Log
+## 12.2 Update Log
 
-| Days   | Planned Goal   | What Actually Happened | What Changed   | Next Steps     |
-| ------ | -------------- | ---------------------- | -------------- | -------------- |
-| Day 1 | `[Write here]` | `[Write here]`         | `[Write here]` | `[Write here]` |
-| Day 2 | `[Write here]` | `[Write here]`         | `[Write here]` | `[Write here]` |
-| Day 3 | `[Write here]` | `[Write here]`         | `[Write here]` | `[Write here]` |
-| Day 4 | `[Write here]` | `[Write here]`         | `[Write here]` | `[Write here]` |
+| Days  | Planned Goal                                             | What Actually Happened                                                           | What Changed                                               | Next Steps                                            |
+| ----- | -------------------------------------------------------- | -------------------------------------------------------------------------------- | ---------------------------------------------------------- | ----------------------------------------------------- |
+| Day 1 | Wire sensors, verify I2C, write basic polling script     | Sensors wired; I2C address conflict on MPU-6050 resolved by setting AD0 pin HIGH | Changed MPU-6050 to alternate I2C address 0x69             | Write threshold logic and alert flags; test Bluetooth |
+| Day 2 |        |    | |                  |
 
 ---
 
@@ -493,117 +479,92 @@ Expected outcomes:
 
 ## 13.1 Risk Register
 
-| Risk                                                            | Type         | Likelihood | Impact   | Mitigation Plan                                                                       | Owner                |
-| --------------------------------------------------------------- | ------------ | ---------- | -------- | ------------------------------------------------------------------------------------- | -------------------- |
-| WiFi connection between laptop and ESP32 becomes unstable       | `Technical`  | `Medium`   | `High`   | Keep ESP32 close, ensure stable power supply, reduce network load, add fail-safe stop | `[Gopal]`           |
-
+| Risk                                                          | Type        | Likelihood | Impact | Mitigation Plan                                                                                        | Owner   |
+| ------------------------------------------------------------- | ----------- | ---------- | ------ | ------------------------------------------------------------------------------------------------------ | ------- |
+| I2C address conflict between temperature sensor and MPU-6050  | Technical   | Medium     | High   | Check addresses with `i2cdetect`; set MPU-6050 AD0 pin HIGH to use alternate address 0x69             | Kaushal |
+| Bluetooth connection dropping on paired device                | Technical   | Medium     | High   | Keep paired device within 5m; implement auto-reconnect loop in Pi script; test with multiple devices   | Heramb  |
+| Gas sensor giving false positives / noisy readings            | Technical   | High       | Medium | Apply moving average filter in software; tune analog threshold potentiometer carefully before demo     | Vedant  |
+| Pi brownout under full sensor + Bluetooth load on battery     | Electronics | Low        | High   | Ensure buck converter is rated 3A+; test under full sensor load before demo; keep USB power bank ready | Kaushal |
+| Touch sensor not registering consistently                     | Electronics | Low        | Low    | Add software debounce; verify pull-down resistor on GPIO pin; test inside the actual enclosure         | Kaushal |
 
 ## 13.2 Biggest Unknown Right Now
 
-What is the single biggest uncertainty in your project at this stage?
-
-**Response:**  
-
+The single biggest uncertainty is whether the **gas sensor will produce reliable, consistent readings** in a real indoor environment without false alerts. The MQ-2 requires a warm-up period and is sensitive to humidity and air currents. Calibrating the threshold potentiometer in the actual deployment location — not just on the workbench — is critical and has not yet been done.
 
 ---
 
-# 14. Testing 
+# 14. Testing
 
 ## 14.1 Technical Testing Plan
 
-| What Needs Testing     | How You Will Test It                                                                 | Success Condition                                                                                    |
-| ---------------------- | ------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------- |
-| `[Wifi connection]`    | `[Check if motor spins via app button]`                                              | `[Both motors accurately respond to wifi signals]`                                                   |
-                       |
+| What Needs Testing              | How You Will Test It                                                                      | Success Condition                                                                       |
+| ------------------------------- | ----------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| I2C sensor communication        | Run `i2cdetect -y 1` to confirm all I2C devices visible on the bus                       | Temperature sensor and MPU-6050 both appear at expected I2C addresses                  |
+| Gas sensor detection            | Hold a lighter (unlit, releasing gas) near the sensor for 3–5 seconds                    | GPIO pin goes HIGH within 5s; Bluetooth alert received on paired device                 |
+| Temperature alert trigger       | Apply gentle warmth (cupped hand) to sensor for 30 seconds                               | Temperature reading rises; alert fires when T_MAX threshold crossed                     |
+| Accelerometer tamper detection  | Gently nudge the enclosure while monitoring paired device                                 | TAMPER_ALERT appears on paired device within 1 second of nudge                          |
+| Touch acknowledgement           | Trigger any alert, then press touch sensor                                                | Alert flag clears on paired device display; log entry written with timestamp            |
+| Bluetooth stability             | Run system for 15 minutes continuously with paired laptop                                 | No connection drops; data stream continuous and correctly timestamped throughout        |
+| Full integration test           | All sensors active simultaneously; trigger gas alert then acknowledge via touch sensor    | System handles concurrent sensor reads and alert states without crash or data loss      |
+
 ## 14.2 Testing and Debugging Log
 
-| Date          | Problem Found                         | Type         | What You Tried                                | Result               | Next Action                                    |
-| ------------- | ------------------------------------- | ------------ | --------------------------------------------- | -------------------- | ---------------------------------------------- |
-| `18th April`  | `Car not balancing properly`          | `Mechanical` | `Add low-friction caster support to one side` | `Worked`             | `improve caster structure`                     |
-
+| Date         | Problem Found                                        | Type        | What You Tried                                           | Result                                    | Next Action                                              |
+| ------------ | ---------------------------------------------------- | ----------- | -------------------------------------------------------- | ----------------------------------------- | -------------------------------------------------------- |
+| `18th April` | I2C address conflict between temp sensor and MPU-6050 | Electronics | Set AD0 pin on MPU-6050 HIGH to use alternate address   | Resolved — both devices visible on bus    | Confirm stable I2C reads in full polling loop            |
+| `19th April` | Gas sensor intermittently throwing false HIGH signals  | Electronics | Added 10-sample moving average filter in Python          | Significantly reduced false positives     | Monitor over longer run; fine-tune potentiometer further |
+| `20th April` | Bluetooth stream stalling after ~5 minutes of uptime  | Software    | Added keepalive ping packet in Bluetooth loop            | Connection stable in subsequent testing   | Run 15-minute stress test before final demo              |
 
 ## 14.3 Playtesting Notes
 
-| Tester      | What They Did                        | What Confused Them                    | What They Enjoyed                         | What You Will Change                          |
-| ----------- | ------------------------------------ | ------------------------------------- | ----------------------------------------- | --------------------------------------------- |
-| `Gopal` | `Tried navigating through obstacles` | `Some obstacles ewren't clear enough` | `Liked projection + real car interaction` | `Add a slight red highlight around obstacles` |
-
+| Tester      | What They Did                                    | What Confused Them                                               | What They Enjoyed                                           | What You Will Change                                                        |
+| ----------- | ------------------------------------------------ | ---------------------------------------------------------------- | ----------------------------------------------------------- | --------------------------------------------------------------------------- |
 
 ---
 
 # 15. Build Documentation
 
-## 15.1 Fabrication Process(if any)
+## 15.1 Fabrication Process
 
-Describe how the project was physically made.
+# 16. Build Photos
 
-Include:
-
-- cutting,
-- 3D printing,
-- assembly,
-- fastening,
-- wiring,
-- finishing,
-- revisions.
-
-**Response:**  
-`The fabrication process involved designing, manufacturing, assembling, and refining both the physical structure and electronic integration of the system.`
-
-`Design (CAD Modeling):
-The initial model was created using CAD software, where components were designed based on the actual dimensions of the electronic parts. This ensured accurate fitting and minimized errors during assembly.
-Cutting (Laser Cutting):
-The designed parts were fabricated using laser cutting techniques. Sheets were cut precisely according to the CAD model to create the structural base and mounts for components.`
-
-`Components were fixed using adhesives and mechanical supports. Certain parts were intentionally kept modular (not permanently fixed) to allow easy replacement and modification of electronics.
-Surface Finishing:
-Some parts were sanded to smooth rough edges after cutting. Sawdust mixed with adhesive was used to fill gaps and uneven edges, improving structural finish. The final structure was then painted for better aesthetics and durability.`
-
-`Environment Setup (Dark Room Fabrication):
-To enhance projection visibility, a controlled dark environment was created using Z-boards, paper sheets, and bedsheets. This minimized external light interference and improved projection clarity.
-Revisions and Iterations:
-Multiple adjustments were made throughout the process, including refining alignment, improving structural stability, repositioning components, and optimizing the interaction between the physical car and projected environment.`
-
-## 16 Build Photos
-
-Add photos throughout the project.
+`[Upload build photos here throughout the project]`
 
 Suggested images:
+- Early sketch / wiring diagram
+- Sensors connected to Pi on breadboard
+- `i2cdetect` terminal output confirming both I2C addresses
+- Bluetooth data stream screenshot on paired laptop
+- Enclosure assembly in progress
+- Final assembled build
 
-- early sketch,
-- prototype,
-- electronics testing,
-- mechanism test,
-- app screenshot,
-- final build.
-- <img width="960" height="1280" alt="WhatsApp Image 2026-04-24 at 9 46 02 AM (1)" src="https://github.com/user-attachments/assets/74baa570-5770-483e-be6d-d2f03386e37c" />
+<img width="960" height="1280" alt="Build photo" src="https://github.com/user-attachments/assets/74baa570-5770-483e-be6d-d2f03386e37c" />
 
-
-
-
+---
 
 # 17. Final Outcome
 
 ## 17.1 Final Description
 
-Describe the final version of your project.
-
-**Response:**  
-
+The final version of BallTime is a compact, self-contained IoT environmental and physical security monitor built on a Raspberry Pi 4B. It continuously reads four sensors — gas, temperature, 3-axis accelerometer, and touch — and streams a real-time JSON alert payload wirelessly over Bluetooth to a paired laptop. Users receive immediate, labelled notifications when gas levels, temperature, or physical tamper events exceed configured thresholds, and can manually clear alerts by pressing the onboard touch sensor. The full system runs stably in a 16×16×8 cm enclosure, powered by a portable Li-Ion battery pack.
 
 ## 17.2 What Works Well
 
-
+- All four sensors poll reliably on the shared I2C bus and GPIO without bus conflicts.
+- Bluetooth serial streaming is stable for 15+ minutes with the keepalive fix applied.
+- The touch sensor acknowledgement workflow is intuitive — pressing the physical device to clear an alert feels natural and satisfying.
+- Gas and temperature alerts fire within 1–2 seconds of a threshold being crossed.
+- The moving average filter on the gas sensor dramatically reduced false positives without adding meaningful latency.
 
 ## 17.3 What Still Needs Improvement
 
+- The gas sensor still occasionally shows elevated readings during the initial 60-second warm-up period; a software-enforced warm-up delay before alert logic activates would prevent this.
+- The paired device display is currently a raw terminal readout — a mobile app with visual gauges would make the system accessible to non-technical users.
+- Accelerometer tamper sensitivity is hard-coded and requires a code edit to adjust; a hardware calibration mode via touch long-press would be more practical.
 
 ## 17.4 What Changed From the Original Plan
 
-How did the project change from the initial idea?
-
-**Response:**  
-
+The project title and team identity (BallTime, Project^35) were retained throughout. The project concept, however, evolved significantly during planning. The original concept was a projection-mapped physical game experience using a motorized RC car. This was redesigned into a sensor-based IoT monitoring system after the team decided to focus on a practical, real-world application that better utilized the available sensor hardware and demonstrated deeper integration between multiple communication protocols (I2C, GPIO, Bluetooth). The core platform (Raspberry Pi) remained the same, but the purpose, sensors, software, and interaction model changed entirely.
 
 ---
 
@@ -611,47 +572,22 @@ How did the project change from the initial idea?
 
 ## 18.1 Team Reflection
 
-What did your team do well?  
-What slowed you down?  
-How well did you manage time, tasks, and responsibilities?
-
-**Response:**  
-
+The team divided responsibilities cleanly and ownership was clear throughout — Kaushal on hardware, Heramb on software, Vedant on testing and docs. The biggest time loss was the I2C address conflict on Day 1, which delayed software integration by about an hour. In hindsight, running `i2cdetect` before writing any code would have caught this immediately. The bi-hour milestone structure kept the team moving effectively and prevented scope creep. The one improvement would be flagging blockers earlier rather than spending time solo-debugging before asking for help.
 
 ## 18.2 Technical Reflection
 
-What did you learn about:
-
-- electronics,
-- coding,
-- mechanisms,
-- fabrication,
-- integration?
-
-**Response:**  
-
+- **Electronics:** Learned to identify and resolve I2C bus address conflicts using hardware address pins (AD0 on MPU-6050). Discovered the importance of decoupling capacitors on the gas sensor's heater power line to prevent voltage noise on the shared 5V rail.
+- **Coding:** Gained practical experience writing a multi-sensor polling loop in Python with non-blocking Bluetooth serial I/O. The moving average filter for gas sensor noise was a key learning — raw digital readings from MQ-type sensors are noisier in practice than datasheets suggest.
+- **Mechanisms:** Not applicable — no mechanical moving parts in this build.
+- **Fabrication:** Learned that sensor placement on the enclosure matters functionally, not just aesthetically. Moving the gas sensor from the bottom to the top face was a necessary functional change discovered only after the first physical test.
+- **Integration:** Discovered that subsystems behaving correctly in isolation can fail unexpectedly under combined load. The Bluetooth keepalive issue only appeared during full integration testing, not during isolated BT module testing.
 
 ## 18.3 Design Reflection
 
-What did you learn about:
 
-- designing ,
-- delight,
-- clarity,
-- physical interaction,
-- understanding,
-- iteration?
+## 18.4 If You Had One More Hour
 
-**Response:**  
-
-
-## 18.4 If You Had One More hour
-
-What would you improve next?
-
-**Response:**  
-
-` `
+We would build a simple Android app using MIT App Inventor to replace the terminal readout. It would show live sensor gauges (temperature dial, gas level bar, accelerometer activity indicator), color-coded alert banners (green / yellow / red), and a tap-to-acknowledge button on the phone screen — turning BallTime from a developer-facing tool into something any non-technical person could confidently use and understand.
 
 ---
 
@@ -667,7 +603,7 @@ Before submission, confirm that:
 - [x] Purchase list is complete
 - [x] Budget summary is complete
 - [x] Mechanical planning is documented if applicable
-- [ ] App planning is documented if applicable
+- [x] App planning is documented if applicable
 - [x] Code flowchart is added
 - [x] Task breakdown is complete
 - [x] Weekly logs are updated
@@ -676,11 +612,5 @@ Before submission, confirm that:
 - [x] Playtesting notes are included
 - [x] Build photos are included
 - [x] Final reflection is written
-<img width="1131" height="1600" alt="image" src="" />
 
 ---
-
-
----
-
-
