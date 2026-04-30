@@ -39,3 +39,156 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+
+Code for Gas Sensor
+#!/usr/bin/env python3
+
+import RPi.GPIO as GPIO
+import time
+
+PIN_MQ_DO = 22
+POLL_INTERVAL = 0.2
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
+GPIO.setup(PIN_MQ_DO, GPIO.IN)
+
+def read_gas():
+    return not bool(GPIO.input(PIN_MQ_DO))
+
+def main():
+    print("=== MQ Gas Sensor Ready ===")
+    print("Waiting for sensor to warm up (10 seconds)...")
+
+    for i in range(10, 0, -1):
+        print(f"  Warming up... {i}s", end="\r")
+        time.sleep(1)
+
+    print("\n[INFO] Sensor ready. Monitoring for gas. Press Ctrl+C to stop.\n")
+
+    baseline = GPIO.input(PIN_MQ_DO)
+    print(f"[INFO] Baseline state: {'HIGH' if baseline else 'LOW'}\n")
+
+    last_state = read_gas()
+
+    try:
+        while True:
+            current_gas = read_gas()
+
+            if current_gas and not last_state:
+                print("🚨 GAS DETECTED — threshold exceeded!")
+            elif not current_gas and last_state:
+                print("✅ CLEAR — gas level back to normal.")
+
+            status = "🚨 ALERT" if current_gas else "✅ CLEAR"
+            print(f"  Status: {status}", end="\r")
+
+            last_state = current_gas
+            time.sleep(POLL_INTERVAL)
+
+    except KeyboardInterrupt:
+        print("\n\n[INFO] Stopped by user.")
+    finally:
+        GPIO.cleanup()
+        print("[INFO] GPIO cleaned up.")
+
+if __name__ == "__main__":
+    main()
+
+
+Code for temperature Sensor
+import from mpu6050 import mpu6050
+import time
+
+MPU_ADDRESS   = 0x68
+POLL_INTERVAL = 1.0
+
+sensor = mpu6050(MPU_ADDRESS)
+
+def read_mpu():
+    try:
+        accel = sensor.get_accel_data()
+        gyro  = sensor.get_gyro_data()
+        temp  = sensor.get_temp()
+        return {
+            "accel": {
+                "x": round(accel['x'], 3),
+                "y": round(accel['y'], 3),
+                "z": round(accel['z'], 3)
+            },
+            "gyro": {
+                "x": round(gyro['x'], 3),
+                "y": round(gyro['y'], 3),
+                "z": round(gyro['z'], 3)
+            },
+            "temp_c": round(temp, 1)
+        }
+    except Exception as e:
+        print(f"[MPU6050] Read error: {e}")
+        return None
+
+def interpret_orientation(ax, ay, az):
+    if az >  8.0:  return "FLAT — face up   ⬆"
+    if az < -8.0:  return "FLAT — face down ⬇"
+    if ax >  8.0:  return "TILTED — left side down  ◀"
+    if ax < -8.0:  return "TILTED — right side down ▶"
+    if ay >  8.0:  return "TILTED — top side down   ▼"
+    if ay < -8.0:  return "TILTED — bottom side down▲"
+    return "ANGLED — in between"
+
+def interpret_motion(gx, gy, gz, threshold=10.0):
+    if abs(gx) > threshold or abs(gy) > threshold or abs(gz) > threshold:
+        return "🔴 MOTION DETECTED"
+    return "🟢 STATIONARY"
+
+def main():
+    print("=== MPU6050 Test ===\n")
+    print("─" * 50)
+
+    read_count = 0
+
+    try:
+        while True:
+            data = read_mpu()
+            read_count += 1
+
+            if data is None:
+                print("⚠️  Failed to read sensor, retrying...")
+                time.sleep(POLL_INTERVAL)
+                continue
+
+            ax = data['accel']['x']
+            ay = data['accel']['y']
+            az = data['accel']['z']
+            gx = data['gyro']['x']
+            gy = data['gyro']['y']
+            gz = data['gyro']['z']
+            tc = data['temp_c']
+
+            orientation = interpret_orientation(ax, ay, az)
+            motion      = interpret_motion(gx, gy, gz)
+
+            print(f"Reading #{read_count}\n")
+            print(f"  📐 Accelerometer (m/s²)")
+            print(f"      X : {ax:>8.3f}")
+            print(f"      Y : {ay:>8.3f}")
+            print(f"      Z : {az:>8.3f}\n")
+            print(f"  🔄 Gyroscope (°/s)")
+            print(f"      X : {gx:>8.3f}")
+            print(f"      Y : {gy:>8.3f}")
+            print(f"      Z : {gz:>8.3f}\n")
+            print(f"  🌡  Temp        : {tc}°C")
+            print(f"  📍 Orientation  : {orientation}")
+            print(f"  🏃 Motion       : {motion}")
+            print("─" * 50)
+
+            time.sleep(POLL_INTERVAL)
+
+    except KeyboardInterrupt:
+        print("\n[INFO] Stopped.")
+
+if __name__ == "__main__":
+    main()
+
