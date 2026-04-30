@@ -82,7 +82,7 @@ By the final review, this README should clearly show:
 ## 1.5 Expanded Project Idea
 
 **What the project is:**  
-BallTime is a compact, self-contained IoT environmental and security monitoring system built around a Raspberry Pi 4B. It acts as a localized "smart node" that continuously tracks ambient conditions and physical tamper events in real time. Four sensors — a Temperature sensor, a Gas sensor, a 3-axis Accelerometer, and a Touch sensor — are polled by the Raspberry Pi via I2C and digital GPIO protocols. The consolidated sensor data is then broadcast wirelessly over Bluetooth to a paired device such as a smartphone or laptop for remote observation and alerting.
+BallTime is a compact, self-contained IoT environmental and security monitoring system built around a Raspberry Pi 4B. It acts as a localized "smart node" that continuously tracks ambient conditions and physical tamper events in real time.Three sensors — a Temperature sensor, a Gas sensor and a Touch sensor — are polled by the Raspberry Pi via I2C and digital GPIO protocols. 
 
 **The experience it creates:**  
 A user places the BallTime node in any environment — a lab, room, or storage area — and receives live alerts on their paired device whenever something goes wrong. If the temperature rises suddenly, a combustible gas is detected, or the device is physically bumped or moved, the system immediately pushes a notification to the paired screen. A physical Touch sensor on the device itself lets the user manually acknowledge and dismiss an active alert without needing to interact with the paired device. The result is a feeling of always-on situational awareness — the environment is being watched even when no one is physically present.
@@ -123,7 +123,7 @@ Most IoT projects either monitor the environment (temperature/air quality) or se
 ## 4.1 Definition of "Usable"
 
 The project is considered usable when:
-- All four sensors (temperature, gas, accelerometer, touch) are reading correctly and returning valid data.
+- All three sensors (temperature, gas, touch) are reading correctly and returning valid data.
 - The Raspberry Pi consolidates sensor data and transmits it over Bluetooth without connection drops.
 - A paired device receives and displays real-time sensor values and alert notifications.
 - The touch sensor successfully acknowledges and resets an active alert.
@@ -173,7 +173,6 @@ Check all that apply.
 **Input:** Four sensors continuously feed data to the Raspberry Pi 4B:
 - A **Gas Sensor** detects combustible gas and smoke particles via a digital GPIO signal.
 - A **Temperature Sensor** reads ambient temperature in °C via the I2C bus.
-- A **3-axis Accelerometer** detects physical movement, bumps, or tilt via I2C.
 - A **Touch Sensor** provides a digital HIGH signal when physically pressed by the user.
 
 **Processing:** The Raspberry Pi 4B runs a Python script that polls all four sensors every 500ms. Each reading is compared against configurable thresholds. If any threshold is crossed, an alert flag is set. If the touch sensor is pressed while an alert is active, the flag is cleared and the event is logged with a timestamp.
@@ -190,7 +189,6 @@ Check all that apply.
 | ------------------------ | ---------------- | ------------------------------------------------------------------------- |
 | Gas Sensor               | Input (Digital)  | Detects combustible gas/smoke; sends HIGH to GPIO when threshold exceeded |
 | Temperature Sensor       | Input (I2C)      | Reads ambient temperature in °C continuously                              |
-| Accelerometer (3-axis)   | Input (I2C)      | Detects bump, tilt, or movement; triggers tamper alert                    |
 | Touch Sensor             | Input (Digital)  | Manual alert acknowledgement; clears alert state on press                 |
 | Raspberry Pi 4B          | Processing       | Polls all sensors, evaluates thresholds, assembles and transmits payload  |
 | Bluetooth (onboard Pi)   | Output           | Broadcasts sensor data wirelessly to paired device                        |
@@ -230,7 +228,6 @@ Check all that apply.
 | Raspberry Pi 4B               | `1`      | Central controller — polls sensors, processes data, transmits |
 | Temperature Sensor (I2C)      | `1`      | Reads ambient temperature                                     |
 | Gas Sensor (MQ-2 or similar)  | `1`      | Detects combustible gases and smoke                           |
-| Accelerometer (MPU-6050)      | `1`      | Detects physical tamper/movement via 3-axis data (I2C)        |
 | Touch Sensor Module           | `1`      | Manual alert acknowledgement input                            |
 | Jumper Wires & Breadboard     | —        | Prototyping connections between Pi and sensors                |
 
@@ -240,7 +237,6 @@ The **Raspberry Pi 4B** is the central hub. All sensors connect to its GPIO head
 
 - **Temperature Sensor** — connected via I2C (SDA → GPIO2 / Pin 3, SCL → GPIO3 / Pin 5). Communicates at I2C address 0x48 (varies by sensor model).
 - **Gas Sensor (MQ-2)** — digital output pin connected to GPIO17. The onboard potentiometer sets the analog detection threshold; the Pi reads a HIGH signal when gas concentration exceeds it.
-- **Accelerometer (MPU-6050)** — connected via I2C (shares SDA/SCL bus with temperature sensor at address 0x68; AD0 pin set LOW by default). The Pi reads 3-axis acceleration registers every 500ms and computes a delta against a calibrated baseline.
 - **Touch Sensor** — digital output connected to GPIO27. A HIGH signal on press triggers the alert acknowledgement routine.
 - **Bluetooth** — handled by the Raspberry Pi's onboard Bluetooth module; no external wiring required.
 - All components share a **common ground**. Power is supplied via USB-C to the Pi; the buck converter steps down the Li-Ion battery voltage to 5V for stable operation.
@@ -358,15 +354,12 @@ On exception → log error to file
 | Raspberry Pi 4B                   | `1`      | `Yes`   | `No`         | `0`            | `4B, 2GB+ RAM`                    | Full Linux OS, built-in Bluetooth, native I2C support     |
 | Temperature Sensor (I2C)          | `1`      | `Yes`   | `No`         | `0`            | `DS18B20 or DHT22 / I2C variant`  | Accurate, I2C-compatible, low power                       |
 | Gas Sensor (MQ-2)                 | `1`      | `Yes`   | `No`         | `0`            | `MQ-2 (LPG, smoke, propane)`      | Broad sensitivity to combustible gases; digital output    |
-| Accelerometer (MPU-6050)          | `1`      | `Yes`   | `No`         | `0`            | `I2C, 3-axis, 16-bit`             | High sensitivity for tamper detection; shares I2C bus     |
 | Touch Sensor Module               | `1`      | `Yes`   | `No`         | `0`            | `TTP223 capacitive module`        | Clean digital output; no mechanical debounce needed       |
 | Jumper Wires & Breadboard         | —        | `Yes`   | `No`         | `0`            | `Standard 40-pin jumper set`      | Rapid prototyping and sensor connection                   |
 
 ## 9.2 Material Justification
 
 The **Raspberry Pi 4B** was chosen over an ESP32 or Arduino because the project requires simultaneous multi-sensor polling, a full Bluetooth stack, and Python-based logic — all of which benefit from a Linux operating system. Its onboard Bluetooth eliminates the need for an external module and simplifies the architecture considerably.
-
-The **MPU-6050 accelerometer** shares the I2C bus with the temperature sensor, keeping wiring minimal and GPIO usage low. Its configurable sensitivity and 16-bit resolution make it well-suited to detecting both gentle nudges and hard impacts for tamper detection.
 
 The **MQ-2 gas sensor** was selected for its broad sensitivity to common combustible gases and smoke. Its digital output pin makes GPIO integration straightforward without needing an additional ADC.
 
