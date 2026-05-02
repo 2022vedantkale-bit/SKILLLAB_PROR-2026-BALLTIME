@@ -1,194 +1,357 @@
-Code for Touch Sensor 
+CODE
 
 import RPi.GPIO as GPIO
+import board
+import adafruit_dht
 import time
+import threading
+import socket
+from flask import Flask
+from flask_socketio import SocketIO
 
 PIN_TOUCH = 17
-POLL_INTERVAL = 0.1
+PIN_MQ_DO = 22
+PIN_DHT   = board.D27
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 GPIO.setup(PIN_TOUCH, GPIO.IN)
-
-def read_touch():
-    return bool(GPIO.input(PIN_TOUCH))
-
-def main():
-    print("=== TTP223 Touch Sensor Ready ===")
-    print("Press Ctrl+C to stop.\n")
-
-    last_state = False
-
-    try:
-        while True:
-            current_state = read_touch()
-
-            if current_state and not last_state:
-                print("👆 TOUCHED")
-            elif not current_state and last_state:
-                print("✋ RELEASED")
-
-            last_state = current_state
-            time.sleep(POLL_INTERVAL)
-
-    except KeyboardInterrupt:
-        print("\n[INFO] Stopped by user.")
-    finally:
-        GPIO.cleanup()
-        print("[INFO] GPIO cleaned up.")
-
-if __name__ == "__main__":
-    main()
-
-
-
-Code for Gas Sensor
-#!/usr/bin/env python3
-
-import RPi.GPIO as GPIO
-import time
-
-PIN_MQ_DO = 22
-POLL_INTERVAL = 0.2
-
-GPIO.setmode(GPIO.BCM)
-GPIO.setwarnings(False)
 GPIO.setup(PIN_MQ_DO, GPIO.IN)
+
+dht_device = adafruit_dht.DHT11(PIN_DHT)
+
+app      = Flask(__name__)
+socketio = SocketIO(app, cors_allowed_origins="*")
+
+HTML = """<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@700;800&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#07090f;--surface:#0f1420;--border:#1a2540;
+  --accent:#00d4ff;--green:#00ff88;--red:#ff3b3b;--yellow:#ffcc00;
+  --text:#e2e8f0;--muted:#3a4a6a;
+  --mono:'JetBrains Mono',monospace;--display:'Syne',sans-serif;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--display);
+     min-height:100vh;display:flex;flex-direction:column;
+     align-items:center;justify-content:center;padding:24px}
+.screen{display:none;width:100%;max-width:480px;animation:fadein 0.3s ease}
+.screen.active{display:flex;flex-direction:column;align-items:center}
+@keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.top-label{font-family:var(--mono);font-size:11px;color:var(--muted);
+           letter-spacing:3px;text-transform:uppercase;margin-bottom:48px;text-align:center}
+.menu-title{font-size:28px;font-weight:800;color:var(--text);
+            margin-bottom:48px;letter-spacing:-1px}
+.menu-title span{color:var(--accent)}
+.menu-options{width:100%;display:flex;flex-direction:column;gap:16px;margin-bottom:48px}
+.option{width:100%;padding:24px 28px;border-radius:16px;border:1px solid var(--border);
+        background:var(--surface);display:flex;align-items:center;gap:20px;
+        transition:all 0.2s;position:relative;overflow:hidden}
+.option::before{content:'';position:absolute;left:0;top:0;bottom:0;
+                width:3px;background:transparent;transition:all 0.2s}
+.option.focused{border-color:var(--accent);background:#0d1a2e}
+.option.focused::before{background:var(--accent)}
+.option-icon{font-size:28px;opacity:0.5;transition:opacity 0.2s}
+.option.focused .option-icon{opacity:1}
+.option-text{flex:1}
+.option-name{font-size:18px;font-weight:700;color:var(--muted);transition:color 0.2s}
+.option.focused .option-name{color:var(--text)}
+.option-desc{font-size:12px;font-family:var(--mono);color:var(--muted);margin-top:4px}
+.option-arrow{font-family:var(--mono);font-size:18px;color:var(--accent);
+              opacity:0;transition:all 0.2s}
+.option.focused .option-arrow{opacity:1}
+.hint-row{display:flex;gap:24px;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.hint{display:flex;align-items:center;gap:6px}
+.hint-key{background:var(--surface);border:1px solid var(--border);
+          border-radius:6px;padding:3px 10px;color:var(--text);font-size:10px}
+.loading-screen{display:none;flex-direction:column;align-items:center;gap:20px}
+.loading-screen.active{display:flex}
+.spinner{width:40px;height:40px;border:2px solid var(--border);
+         border-top-color:var(--accent);border-radius:50%;
+         animation:spin 0.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:2px}
+.result-back{font-family:var(--mono);font-size:11px;color:var(--muted);
+             letter-spacing:2px;text-transform:uppercase;
+             margin-bottom:32px;align-self:flex-start;display:flex;align-items:center;gap:8px}
+.result-back::before{content:'←'}
+.result-card{width:100%;border-radius:20px;border:1px solid var(--border);
+             background:var(--surface);padding:36px;margin-bottom:32px;text-align:center}
+.result-card.temp-card{border-color:rgba(0,212,255,0.3)}
+.result-card.gas-ok{border-color:rgba(0,255,136,0.3)}
+.result-card.gas-alert{border-color:rgba(255,59,59,0.5)}
+.result-icon{font-size:48px;margin-bottom:20px;display:block}
+.result-label{font-family:var(--mono);font-size:11px;color:var(--muted);
+              letter-spacing:3px;text-transform:uppercase;margin-bottom:12px}
+.result-main{font-size:56px;font-weight:800;line-height:1;margin-bottom:8px}
+.result-main.blue{color:var(--accent)}
+.result-main.green{color:var(--green)}
+.result-main.red{color:var(--red)}
+.result-sub{font-family:var(--mono);font-size:14px;color:var(--muted);margin-bottom:24px}
+.result-row{display:flex;gap:16px;justify-content:center}
+.result-chip{background:#0d1a2e;border:1px solid var(--border);
+             border-radius:10px;padding:12px 20px;text-align:center}
+.result-chip-label{font-family:var(--mono);font-size:10px;color:var(--muted);
+                   letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
+.result-chip-val{font-size:18px;font-weight:700;color:var(--text)}
+.result-hint{font-family:var(--mono);font-size:11px;color:var(--muted);text-align:center}
+.touch-badge{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+             background:var(--surface);border:1px solid var(--border);
+             border-radius:30px;padding:8px 20px;font-family:var(--mono);
+             font-size:11px;color:var(--muted);display:flex;
+             align-items:center;gap:10px;transition:all 0.2s;white-space:nowrap}
+.touch-badge.single{border-color:var(--accent);color:var(--accent)}
+.touch-badge.double{border-color:var(--green);color:var(--green)}
+.touch-badge.long{border-color:var(--red);color:var(--red)}
+.touch-dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+</style>
+</head>
+<body>
+
+<div id="screen-menu" class="screen active">
+  <div class="top-label">raspberry pi · sensor system</div>
+  <div class="menu-title">SELECT <span>SENSOR</span></div>
+  <div class="menu-options">
+    <div class="option focused" id="opt-0">
+      <div class="option-icon">🌡</div>
+      <div class="option-text">
+        <div class="option-name">Check Temperature</div>
+        <div class="option-desc">DHT11 · pin 13 · temp + humidity</div>
+      </div>
+      <div class="option-arrow">→</div>
+    </div>
+    <div class="option" id="opt-1">
+      <div class="option-icon">💨</div>
+      <div class="option-text">
+        <div class="option-name">Check Gas</div>
+        <div class="option-desc">MQ sensor · pin 15 · digital output</div>
+      </div>
+      <div class="option-arrow">→</div>
+    </div>
+  </div>
+  <div class="hint-row">
+    <div class="hint"><span class="hint-key">SINGLE</span>navigate</div>
+    <div class="hint"><span class="hint-key">DOUBLE</span>select</div>
+    <div class="hint"><span class="hint-key">LONG</span>back</div>
+  </div>
+</div>
+
+<div id="screen-loading" class="loading-screen">
+  <div class="spinner"></div>
+  <div class="loading-text">READING SENSOR...</div>
+</div>
+
+<div id="screen-result" class="screen">
+  <div class="result-back">back to menu</div>
+  <div class="result-card" id="result-card">
+    <span class="result-icon" id="result-icon"></span>
+    <div class="result-label" id="result-label"></div>
+    <div class="result-main"  id="result-main"></div>
+    <div class="result-sub"   id="result-sub"></div>
+    <div class="result-row"   id="result-row"></div>
+  </div>
+  <div class="result-hint">LONG TOUCH — back &nbsp;·&nbsp; DOUBLE TOUCH — refresh</div>
+</div>
+
+<div class="touch-badge" id="touch-badge">
+  <div class="touch-dot"></div>
+  <span id="touch-badge-text">TOUCH · READY</span>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.min.js"></script>
+<script>
+const socket   = io();
+let focused    = 0;
+let screen     = 'menu';
+let lastSensor = null;
+const OPTS     = 2;
+
+function showScreen(name){
+  document.getElementById('screen-menu').classList.remove('active');
+  document.getElementById('screen-loading').classList.remove('active');
+  document.getElementById('screen-result').classList.remove('active');
+  if(name==='menu')    document.getElementById('screen-menu').classList.add('active');
+  if(name==='loading') document.getElementById('screen-loading').classList.add('active');
+  if(name==='result')  document.getElementById('screen-result').classList.add('active');
+  screen = name;
+}
+
+function setFocus(idx){
+  document.querySelectorAll('.option').forEach((o,i)=>{
+    o.classList.toggle('focused', i===idx);
+  });
+  focused = idx;
+}
+
+function flashBadge(type, text){
+  const b = document.getElementById('touch-badge');
+  const t = document.getElementById('touch-badge-text');
+  b.className = 'touch-badge ' + type;
+  t.textContent = text;
+  setTimeout(()=>{ b.className='touch-badge'; t.textContent='TOUCH · READY'; }, 800);
+}
+
+function requestReading(sensor){
+  lastSensor = sensor;
+  showScreen('loading');
+  socket.emit('request_reading', {sensor: sensor});
+}
+
+function showResult(data){
+  showScreen('result');
+  if(data.type === 'temperature'){
+    document.getElementById('result-card').className = 'result-card temp-card';
+    document.getElementById('result-icon').textContent = '🌡';
+    document.getElementById('result-label').textContent = 'TEMPERATURE';
+    if(data.temp_c !== null){
+      document.getElementById('result-main').textContent = data.temp_c + '°C';
+      document.getElementById('result-main').className   = 'result-main blue';
+      document.getElementById('result-sub').textContent  = data.temp_f + ' °F';
+      document.getElementById('result-row').innerHTML = `
+        <div class="result-chip">
+          <div class="result-chip-label">Humidity</div>
+          <div class="result-chip-val">${data.humidity}%</div>
+        </div>
+        <div class="result-chip">
+          <div class="result-chip-label">Status</div>
+          <div class="result-chip-val" style="color:${data.temp_c>=40?'var(--red)':data.temp_c>=35?'var(--yellow)':'var(--green)'}">
+            ${data.temp_c>=40?'CRITICAL':data.temp_c>=35?'WARNING':'NORMAL'}
+          </div>
+        </div>`;
+    } else {
+      document.getElementById('result-main').textContent = 'READ ERROR';
+      document.getElementById('result-main').className   = 'result-main red';
+      document.getElementById('result-sub').textContent  = 'sensor failed — double touch to retry';
+      document.getElementById('result-row').innerHTML    = '';
+    }
+  } else if(data.type === 'gas'){
+    document.getElementById('result-card').className   = data.gas ? 'result-card gas-alert' : 'result-card gas-ok';
+    document.getElementById('result-icon').textContent  = data.gas ? '🚨' : '✅';
+    document.getElementById('result-label').textContent = 'GAS SENSOR';
+    document.getElementById('result-main').textContent  = data.gas ? 'ALERT' : 'CLEAR';
+    document.getElementById('result-main').className    = 'result-main ' + (data.gas ? 'red' : 'green');
+    document.getElementById('result-sub').textContent   = data.gas ? 'Gas detected above threshold' : 'No gas detected';
+    document.getElementById('result-row').innerHTML = `
+      <div class="result-chip">
+        <div class="result-chip-label">MQ Pin 15</div>
+        <div class="result-chip-val">${data.gas ? 'LOW · alert' : 'HIGH · clear'}</div>
+      </div>`;
+  }
+}
+
+socket.on('touch_action', (data)=>{
+  if(data.action === 'single'){
+    flashBadge('single', 'SINGLE · NAVIGATE');
+    if(screen === 'menu') setFocus((focused + 1) % OPTS);
+  }
+  if(data.action === 'double'){
+    flashBadge('double', 'DOUBLE · SELECT');
+    if(screen === 'menu'){
+      requestReading(focused === 0 ? 'temperature' : 'gas');
+    } else if(screen === 'result'){
+      if(lastSensor) requestReading(lastSensor);
+    }
+  }
+  if(data.action === 'long'){
+    flashBadge('long', 'LONG · BACK');
+    if(screen === 'result' || screen === 'loading'){
+      showScreen('menu');
+      setFocus(0);
+    }
+  }
+});
+
+socket.on('sensor_result', (data)=>{ showResult(data); });
+</script>
+</body>
+</html>"""
 
 def read_gas():
     return not bool(GPIO.input(PIN_MQ_DO))
 
-def main():
-    print("=== MQ Gas Sensor Ready ===")
-    print("Waiting for sensor to warm up (10 seconds)...")
-
-    for i in range(10, 0, -1):
-        print(f"  Warming up... {i}s", end="\r")
-        time.sleep(1)
-
-    print("\n[INFO] Sensor ready. Monitoring for gas. Press Ctrl+C to stop.\n")
-
-    baseline = GPIO.input(PIN_MQ_DO)
-    print(f"[INFO] Baseline state: {'HIGH' if baseline else 'LOW'}\n")
-
-    last_state = read_gas()
-
+def read_dht():
     try:
-        while True:
-            current_gas = read_gas()
+        temp_c   = dht_device.temperature
+        humidity = dht_device.humidity
+        if temp_c is not None and humidity is not None:
+            temp_f = round((temp_c * 9 / 5) + 32, 1)
+            return round(temp_c, 1), temp_f, round(humidity, 1)
+    except RuntimeError:
+        pass
+    return None, None, None
 
-            if current_gas and not last_state:
-                print("🚨 GAS DETECTED — threshold exceeded!")
-            elif not current_gas and last_state:
-                print("✅ CLEAR — gas level back to normal.")
+def touch_loop():
+    LONG_PRESS   = 2.0
+    DOUBLE_GAP   = 0.4
+    DEBOUNCE     = 0.05
+    baseline     = bool(GPIO.input(PIN_TOUCH))
+    press_time   = None
+    release_time = None
+    click_count  = 0
 
-            status = "🚨 ALERT" if current_gas else "✅ CLEAR"
-            print(f"  Status: {status}", end="\r")
+    while True:
+        current = bool(GPIO.input(PIN_TOUCH))
+        touched = (current != baseline)
 
-            last_state = current_gas
-            time.sleep(POLL_INTERVAL)
+        if touched and press_time is None:
+            press_time = time.time()
 
-    except KeyboardInterrupt:
-        print("\n\n[INFO] Stopped by user.")
-    finally:
-        GPIO.cleanup()
-        print("[INFO] GPIO cleaned up.")
+        if not touched and press_time is not None:
+            held = time.time() - press_time
+            if held >= LONG_PRESS:
+                socketio.emit("touch_action", {"action": "long"})
+                click_count  = 0
+                release_time = None
+            else:
+                click_count += 1
+                release_time = time.time()
+            press_time = None
+
+        if release_time is not None and press_time is None:
+            if time.time() - release_time > DOUBLE_GAP:
+                if click_count == 1:
+                    socketio.emit("touch_action", {"action": "single"})
+                elif click_count >= 2:
+                    socketio.emit("touch_action", {"action": "double"})
+                click_count  = 0
+                release_time = None
+
+        time.sleep(DEBOUNCE)
+
+@socketio.on("request_reading")
+def handle_request(data):
+    sensor = data.get("sensor")
+    if sensor == "temperature":
+        temp_c, temp_f, humidity = read_dht()
+        socketio.emit("sensor_result", {
+            "type"    : "temperature",
+            "temp_c"  : temp_c,
+            "temp_f"  : temp_f,
+            "humidity": humidity
+        })
+    elif sensor == "gas":
+        gas = read_gas()
+        socketio.emit("sensor_result", {
+            "type": "gas",
+            "gas" : gas
+        })
+
+@app.route("/")
+def index():
+    return HTML
 
 if __name__ == "__main__":
-    main()
-
-
-Code for temperature Sensor
-import from mpu6050 import mpu6050
-import time
-
-MPU_ADDRESS   = 0x68
-POLL_INTERVAL = 1.0
-
-sensor = mpu6050(MPU_ADDRESS)
-
-def read_mpu():
-    try:
-        accel = sensor.get_accel_data()
-        gyro  = sensor.get_gyro_data()
-        temp  = sensor.get_temp()
-        return {
-            "accel": {
-                "x": round(accel['x'], 3),
-                "y": round(accel['y'], 3),
-                "z": round(accel['z'], 3)
-            },
-            "gyro": {
-                "x": round(gyro['x'], 3),
-                "y": round(gyro['y'], 3),
-                "z": round(gyro['z'], 3)
-            },
-            "temp_c": round(temp, 1)
-        }
-    except Exception as e:
-        print(f"[MPU6050] Read error: {e}")
-        return None
-
-def interpret_orientation(ax, ay, az):
-    if az >  8.0:  return "FLAT — face up   ⬆"
-    if az < -8.0:  return "FLAT — face down ⬇"
-    if ax >  8.0:  return "TILTED — left side down  ◀"
-    if ax < -8.0:  return "TILTED — right side down ▶"
-    if ay >  8.0:  return "TILTED — top side down   ▼"
-    if ay < -8.0:  return "TILTED — bottom side down▲"
-    return "ANGLED — in between"
-
-def interpret_motion(gx, gy, gz, threshold=10.0):
-    if abs(gx) > threshold or abs(gy) > threshold or abs(gz) > threshold:
-        return "🔴 MOTION DETECTED"
-    return "🟢 STATIONARY"
-
-def main():
-    print("=== MPU6050 Test ===\n")
-    print("─" * 50)
-
-    read_count = 0
-
-    try:
-        while True:
-            data = read_mpu()
-            read_count += 1
-
-            if data is None:
-                print("⚠️  Failed to read sensor, retrying...")
-                time.sleep(POLL_INTERVAL)
-                continue
-
-            ax = data['accel']['x']
-            ay = data['accel']['y']
-            az = data['accel']['z']
-            gx = data['gyro']['x']
-            gy = data['gyro']['y']
-            gz = data['gyro']['z']
-            tc = data['temp_c']
-
-            orientation = interpret_orientation(ax, ay, az)
-            motion      = interpret_motion(gx, gy, gz)
-
-            print(f"Reading #{read_count}\n")
-            print(f"  📐 Accelerometer (m/s²)")
-            print(f"      X : {ax:>8.3f}")
-            print(f"      Y : {ay:>8.3f}")
-            print(f"      Z : {az:>8.3f}\n")
-            print(f"  🔄 Gyroscope (°/s)")
-            print(f"      X : {gx:>8.3f}")
-            print(f"      Y : {gy:>8.3f}")
-            print(f"      Z : {gz:>8.3f}\n")
-            print(f"  🌡  Temp        : {tc}°C")
-            print(f"  📍 Orientation  : {orientation}")
-            print(f"  🏃 Motion       : {motion}")
-            print("─" * 50)
-
-            time.sleep(POLL_INTERVAL)
-
-    except KeyboardInterrupt:
-        print("\n[INFO] Stopped.")
-
-if __name__ == "__main__":
-    main()
-
+    ip = socket.gethostbyname(socket.gethostname())
+    print("=== Touch Navigator ===")
+    print(f"Open browser : http://{ip}:5000")
+    print("Single touch : navigate")
+    print("Double touch : select")
+    print("Long press   : go back")
+    print("─" * 40)
+    t = threading.Thread(target=touch_loop, daemon=True)
+    t.start()
+    socketio.run(app, host="0.0.0.0", port=5000, debug=False)
