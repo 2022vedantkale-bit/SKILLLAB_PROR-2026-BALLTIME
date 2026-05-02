@@ -105,12 +105,7 @@ Raspberry Pi 4B, Python 3, Flask, Flask-SocketIO, RPi.GPIO, adafruit-circuitpyth
 
 ## 2.1 References
 
-| Source Type  | Title / Link                                                                           | What Inspired You                                                                               |
-| ------------ | -------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| `[Video]`    | `https://www.instagram.com/reel/DW4CT7WCDry/?igsh=cXg3dzAxYmdncDBo`                   | `How interactive physical + digital systems can respond intelligently to real-world conditions` |
-| `[Concept]`  | `Kiosk / ATM navigation patterns`                                                      | `Navigating a full UI with a single physical button — minimal hardware, maximum control`        |
-| `[Field]`    | `Industrial gas detection and environmental safety systems`                            | `Using gas + temperature sensors together for proactive safety alerts`                          |
-
+| Source Type  | Title / Link                                                                           | What Inspired You                                       
 ## 2.2 Original Twist
 
 Most IoT sensor projects dump raw numbers to a terminal. BallTime's twist is its **touch-driven browser UI**: a single capacitive button on the hardware controls a polished full-screen web interface served over the local network. There is no app to install, no cloud account to create — any browser on the same Wi-Fi opens the page and the physical button navigates it in real time via WebSocket.
@@ -781,7 +776,6 @@ if __name__ == "__main__":
 | DHT11 temperature/humidity sensor | `1`      | `Yes`   | `No`         | `0`            | `DHT11 module or bare sensor`     | Simple single-wire protocol; reads both temp and humidity |
 | Gas Sensor (MQ-2 or MQ-135)       | `1`      | `Yes`   | `No`         | `0`            | `MQ series with DO pin`           | Broad sensitivity; digital output directly GPIO-readable  |
 | Capacitive touch sensor           | `1`      | `Yes`   | `No`         | `0`            | `TTP223 or similar`               | Clean debounced digital output; no mechanical wear        |
-| 10 kΩ resistor                    | `1`      | `Yes`   | `No`         | `0`            | `1/4 W through-hole`              | Pull-up required on DHT11 data line                       |
 | Jumper wires & breadboard         | —        | `Yes`   | `No`         | `0`            | `Standard 40-pin jumper set`      | Rapid prototyping                                         |
 
 ## 10.2 Material Justification
@@ -822,13 +816,13 @@ All components were sourced from the kit. External spend: **₹0**.
 | T6      | Touch gesture tuning & threshold logic    | Vedant   | `1`             | Hour 3     | T3, T4     | `Done`        |
 | T7      | End-to-end integration test               | All      | `2`             | Hour 4     | T5, T6     | `In Progress` |
 | T8      | Enclosure assembly & finishing            | Kaushal  | `1`             | Hour 4     | T2         | `Pending`     |
-| T9      | Playtesting, documentation, final review  | Vedant   | `2`             | Hour 4     | T7         | `Pending`     |
+| T9      | Playtesting, documentation, final review  | Heramb   | `2`             | Hour 4     | T7         | `Pending`     |
 
 ## 11.3 Responsibility Split
 
 | Area              | Main Owner   | Support Owner |
 | ----------------- | ------------ | ------------- |
-| Concept           | Vedant       | All           |
+| Concept           | Heramb       | All           |
 | Electronics       | Kaushal      | Heramb        |
 | Coding            | Heramb       | Vedant        |
 | Mechanical build  | Kaushal      | Heramb        |
@@ -877,7 +871,7 @@ All components were sourced from the kit. External spend: **₹0**.
 | Days  | Planned Goal                                             | What Actually Happened                                                                          | What Changed                                                         | Next Steps                                        |
 | ----- | -------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- | ------------------------------------------------- |
 | Day 1 | Wire sensors, write polling script, build Flask server   | Sensors wired and verified; Flask server throwing 500 — NameError: name 'HTML' is not defined   | Moved `HTML = """..."""` to before the Flask route function          | Full end-to-end test; enclosure assembly          |
-| Day 2 |                                                          |                                                                                                 |                                                                      |                                                   |
+| Day 2 | Integrated everything, ran results                                                         |                                                                                                 |                                                                      |                                                   |
 
 ---
 
@@ -985,7 +979,7 @@ The original plan used Bluetooth RFCOMM to stream data to a paired terminal. Thi
 
 ## 18.1 Team Reflection
 
-Ownership was clear throughout — Kaushal on hardware, Heramb on software, Vedant on testing and docs. The biggest time loss was the Flask NameError on Day 1 (HTML variable defined after the route function that references it). Running the server and opening the browser immediately would have caught this in seconds — the lesson is to do an end-to-end smoke test before writing any sensor logic. The touch gesture detection required more tuning time than estimated; building a standalone gesture test script first (before integrating SocketIO) would have saved iteration time.
+Ownership was clear throughout — Kaushal on hardware, Heramb on software, Vedant on testing and debugging. The biggest time loss was the Flask NameError on Day 1 (HTML variable defined after the route function that references it). Running the server and opening the browser immediately would have caught this in seconds — the lesson is to do an end-to-end smoke test before writing any sensor logic. The touch gesture detection required more tuning time than estimated; building a standalone gesture test script first (before integrating SocketIO) would have saved iteration time.
 
 ## 18.2 Technical Reflection
 
