@@ -204,9 +204,8 @@ Check all that apply.
 
 ## 6.2 Labeled Build Sketch/architecture/flow diagram/algorithm
 
-`[Upload image and link here]`
+<img width="1440" height="1480" alt="image" src="https://github.com/user-attachments/assets/fa748202-45d8-414a-a445-cc6a1f70f5fc" />
 
-<img width="1600" height="1200" alt="image" src="https://github.com/user-attachments/assets/95637f31-b4e7-4427-a9e1-4b63fbeb0ac5" />
 
 ## 6.3 Approximate Dimensions
 
