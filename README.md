@@ -242,8 +242,6 @@ The **Raspberry Pi 4B** is the central hub. All sensors connect to its GPIO head
 
 ## 7.3 Circuit Diagram/architecture diagram
 
-<img width="720" height="1280" alt="image" src="https://github.com/user-attachments/assets/048f5d7f-a32f-46d8-8fde-cf72cdf22871" />
-<img width="720" height="1280" alt="image" src="https://github.com/user-attachments/assets/24526266-7204-46c5-872a-43387dfd35ea" />
 
 
 
@@ -532,8 +530,8 @@ Suggested images:
 - Bluetooth data stream screenshot on paired laptop
 - Enclosure assembly in progress
 - Final assembled build
+<img width="720" height="1280" alt="image" src="https://github.com/user-attachments/assets/66ab6b02-62ba-4f4c-82b9-f4492295c68e" />
 
-<img width="960" height="1280" alt="Build photo" src="https://github.com/user-attachments/assets/74baa570-5770-483e-be6d-d2f03386e37c" />
 
 ---
 
